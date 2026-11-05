@@ -1,0 +1,9 @@
+{
+  "upstream_head": "af065f183d14bedfade969f59310fac0ecce5a12",
+  "configuration": "lion_cove_ddr4",
+  "config_sha256": "d79995fb0bbf129d58b70685dde5cc9f9cc74f04830c4b9d8506e6cde7ade7d2",
+  "policy_checks": 4,
+  "memory_checks": 5,
+  "long_block_ipc": 8.0,
+  "control_policy_checks": 8
+}

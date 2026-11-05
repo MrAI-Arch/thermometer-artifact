@@ -20,7 +20,7 @@ uint8_t warmup_complete[NUM_CPUS],
         all_simulation_complete = 0,
         MAX_INSTR_DESTINATIONS = NUM_INSTR_DESTINATIONS,
         knob_cloudsuite = 0,
-        knob_low_bandwidth = 1,
+        knob_low_bandwidth = !DRAM_DEFAULT_FULL_BANDWIDTH,
         pt = 0,
         perfect_bp = 0,
         perfect_btb = 0,
@@ -238,6 +238,9 @@ void finish_warmup()
 	
         reset_cache_stats(i, &ooo_cpu[i].L1I);
         reset_cache_stats(i, &ooo_cpu[i].L1D);
+#if ENABLE_L1M
+        reset_cache_stats(i, &ooo_cpu[i].L1M);
+#endif
         reset_cache_stats(i, &ooo_cpu[i].L2C);
         reset_cache_stats(i, &LLC);
     }
@@ -456,6 +459,16 @@ int main(int argc, char** argv)
     printf("Off-chip DRAM Size: %u MB Channels: %u Width: %u-bit Data Rate: %u MT/s\n",
             DRAM_SIZE, DRAM_CHANNELS, 8*DRAM_CHANNEL_WIDTH, DRAM_MTPS);
 
+#if ENABLE_L1M
+    cout << "Model: Lion Cove-inspired + classic DDR4; instruction-slot abstraction" << endl;
+    cout << "Core MHz: " << CPU_FREQ << " Fetch/decode/allocate/execute/retire: "
+         << FETCH_WIDTH << "/" << DECODE_WIDTH << "/" << DISPATCH_WIDTH << "/"
+         << EXEC_WIDTH << "/" << RETIRE_WIDTH << " ROB: " << ROB_SIZE << endl;
+    cout << "Data path: L0D 48 KiB -> L1D_MID 192 KiB -> L2C 3 MiB -> LLC 4 MiB" << endl;
+    cout << "DRAM tRP/tRCD/tCAS cycles: " << tRP << "/" << tRCD << "/" << tCAS
+         << " Burst cycles: " << DRAM_DBUS_RETURN_TIME << endl;
+#endif
+
     // end consequence of knobs
 
     // search through the argv for "-traces"
@@ -650,6 +663,9 @@ int main(int argc, char** argv)
                 cout << " (Simulation time: " << elapsed_hour << " hr " << elapsed_minute << " min " << elapsed_second << " sec) " << endl;
 
                 record_roi_stats(i, &ooo_cpu[i].L1D);
+#if ENABLE_L1M
+        record_roi_stats(i, &ooo_cpu[i].L1M);
+#endif
                 record_roi_stats(i, &ooo_cpu[i].L1I);
                 record_roi_stats(i, &ooo_cpu[i].L2C);
                 record_roi_stats(i, &LLC);
@@ -680,6 +696,9 @@ int main(int argc, char** argv)
             cout << " instructions: " << ooo_cpu[i].num_retired - ooo_cpu[i].begin_sim_instr << " cycles: " << current_core_cycle[i] - ooo_cpu[i].begin_sim_cycle << endl;
 #ifndef CRC2_COMPILE
             print_sim_stats(i, &ooo_cpu[i].L1D);
+#if ENABLE_L1M
+        print_sim_stats(i, &ooo_cpu[i].L1M);
+#endif
             print_sim_stats(i, &ooo_cpu[i].L1I);
             print_sim_stats(i, &ooo_cpu[i].L2C);
 	    ooo_cpu[i].l1i_prefetcher_final_stats();
@@ -697,6 +716,9 @@ int main(int argc, char** argv)
         cout << " instructions: " << ooo_cpu[i].finish_sim_instr << " cycles: " << ooo_cpu[i].finish_sim_cycle << endl;
 #ifndef CRC2_COMPILE
         print_roi_stats(i, &ooo_cpu[i].L1D);
+#if ENABLE_L1M
+        print_roi_stats(i, &ooo_cpu[i].L1M);
+#endif
         print_roi_stats(i, &ooo_cpu[i].L1I);
         print_roi_stats(i, &ooo_cpu[i].L2C);
 #endif

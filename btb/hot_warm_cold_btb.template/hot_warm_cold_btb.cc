@@ -1,3 +1,4 @@
+#include "experiment_paths.h"
 
 /*
  * This file implements a hot warm cold Branch Target Buffer (BTB) structure.
@@ -291,8 +292,8 @@ public:
             short_name = "twig_" + short_name;
         }
         fs::path opt_access_record_path = with_twig ?
-                                          "/mnt/storage/shixins/champsim_pt/opt_access_record_predecoder" :
-                                          "/mnt/storage/shixins/champsim_pt/opt_access_record";
+                                          thermometer_data_path("opt_access_record_predecoder") :
+                                          thermometer_data_path("opt_access_record");
         string sub_dir = "way" + std::to_string(train_total_btb_ways);
         if (train_total_btb_entries != 8 && train_total_btb_entries != 8192) {
             if (train_total_btb_entries % 1024 == 0) {
@@ -632,7 +633,7 @@ public:
 //
 //        // Print compare with opt
 //        cout << "Start print compare with opt with size = " << evict_compare_record.size() << endl;
-//        string dir = "/mnt/storage/shixins/champsim_pt/hwc_opt_compare_raw_data/hwc_opt_" + program_name +
+//        string dir = thermometer_data_path("hwc_opt_compare_raw_data/hwc_opt_") + program_name +
 //                     std::to_string(total_btb_ways);
 //        fs::create_directory(dir);
 //        auto short_name = O3_CPU::find_trace_short_name(trace_name, O3_CPU::NameKind::TRACE_TRAIN);
@@ -645,7 +646,7 @@ public:
 //        }
 //        out.close();
 //        cout << "End print compare with opt" << endl;
-//        fs::path not_trained_dir = "/mnt/storage/shixins/champsim_pt/input_generalization/not_trained_branches";
+//        fs::path not_trained_dir = thermometer_data_path("input_generalization/not_trained_branches");
 //        fs::create_directory(not_trained_dir);
 //        auto program_not_trained_dir = not_trained_dir / (program_name + std::to_string(total_btb_ways));
 //        fs::create_directory(program_not_trained_dir);

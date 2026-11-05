@@ -133,3 +133,17 @@ set(tCAS_DRAM_NANOSECONDS 12.5)
 # virtual memory
 set(VIRTUAL_MEMORY_SIZE 8589934592)
 set(VIRTUAL_MEMORY_NUM_LEVELS 5)
+
+# Optional Lion Cove data-only intermediate cache; disabled for old configs.
+set(ENABLE_L1M 0)
+set(DRAM_DEFAULT_FULL_BANDWIDTH 0)
+set(L1M_SET 256)
+set(L1M_WAY 12)
+set(L1M_WQ_SIZE 32)
+set(L1M_RQ_SIZE 32)
+set(L1M_PQ_SIZE 16)
+set(L1M_MSHR_SIZE 32)
+set(L1M_HIT_LATENCY 4)
+set(L1M_FILL_LATENCY 1)
+set(L1M_MAX_READ 2)
+set(L1M_MAX_WRITE 2)

@@ -1,3 +1,4 @@
+#include "experiment_paths.h"
 //
 // Created by Shixin Song on 2021/6/5.
 //
@@ -89,8 +90,8 @@ public:
             return;
         }
         auto short_name = O3_CPU::find_trace_short_name(trace_name, O3_CPU::NameKind::TRACE);
-        fs::create_directory("/mnt/storage/shixins/champsim_pt/reuse_distance_taken");
-        string filename = "/mnt/storage/shixins/champsim_pt/reuse_distance_taken/" + short_name + ".csv";
+        fs::create_directory(thermometer_data_path("reuse_distance_taken"));
+        string filename = thermometer_data_path("reuse_distance_taken/") + short_name + ".csv";
         cout << "Open reuse distance file " << filename << endl;
         ofstream out(filename.c_str());
         assert(out.is_open());

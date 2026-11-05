@@ -17,6 +17,7 @@
 #define IS_L1D  4
 #define IS_L2C  5
 #define IS_LLC  6
+#define IS_L1M  7 // Generic data-only intermediate cache, no prefetcher callbacks
 
 // PAGE
 extern uint32_t PAGE_TABLE_LATENCY, SWAP_LATENCY;

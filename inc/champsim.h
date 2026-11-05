@@ -23,10 +23,18 @@
 #define COMPLETED 2
 
 #define FILL_L1    1
+#if ENABLE_L1M
+#define FILL_L1M   2
+#define FILL_L2    4
+#define FILL_LLC   8
+#define FILL_DRC  16
+#define FILL_DRAM 32
+#else
 #define FILL_L2    2
 #define FILL_LLC   4
 #define FILL_DRC   8
 #define FILL_DRAM 16
+#endif
 
 using namespace std;
 

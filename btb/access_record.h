@@ -1,3 +1,4 @@
+#include "experiment_paths.h"
 //
 // Created by Shixin Song on 2021/6/24.
 //
@@ -109,7 +110,7 @@ public:
         if (with_twig) {
             short_name = "twig_" + short_name;
         }
-        fs::path opt_access_record_path = ("/mnt/storage/shixins/champsim_pt/opt_access_record" + btb_type_to_suffix(btb_type));
+        fs::path opt_access_record_path = (thermometer_data_path("opt_access_record") + btb_type_to_suffix(btb_type));
         fs::create_directory(opt_access_record_path);
         string sub_dir = "way" + std::to_string(total_btb_ways);
         if (total_btb_entries != 8 && total_btb_entries != 8192) {

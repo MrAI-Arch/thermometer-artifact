@@ -1,3 +1,4 @@
+#include "experiment_paths.h"
 #ifndef OOO_CPU_H
 #define OOO_CPU_H
 
@@ -109,10 +110,16 @@ public:
                  STLB_FILL_LATENCY, STLB_MAX_READ, STLB_MAX_WRITE},
             L1I{"L1I", L1I_SET, L1I_WAY, L1I_WQ_SIZE, L1I_RQ_SIZE, L1I_PQ_SIZE, L1I_MSHR_SIZE, L1I_HIT_LATENCY,
                 L1I_FILL_LATENCY, L1I_MAX_READ, L1I_MAX_WRITE},
-            L1D{"L1D", L1D_SET, L1D_WAY, L1D_WQ_SIZE, L1D_RQ_SIZE, L1D_PQ_SIZE, L1D_MSHR_SIZE, L1D_HIT_LATENCY,
+            L1D{ENABLE_L1M ? "L0D" : "L1D", L1D_SET, L1D_WAY, L1D_WQ_SIZE, L1D_RQ_SIZE, L1D_PQ_SIZE, L1D_MSHR_SIZE, L1D_HIT_LATENCY,
                 L1D_FILL_LATENCY, L1D_MAX_READ, L1D_MAX_WRITE},
             L2C{"L2C", L2C_SET, L2C_WAY, L2C_WQ_SIZE, L2C_RQ_SIZE, L2C_PQ_SIZE, L2C_MSHR_SIZE, L2C_HIT_LATENCY,
                 L2C_FILL_LATENCY, L2C_MAX_READ, L2C_MAX_WRITE};
+
+#if ENABLE_L1M
+    CACHE L1M{"L1D_MID", L1M_SET, L1M_WAY, L1M_WQ_SIZE, L1M_RQ_SIZE,
+              L1M_PQ_SIZE, L1M_MSHR_SIZE, L1M_HIT_LATENCY, L1M_FILL_LATENCY,
+              L1M_MAX_READ, L1M_MAX_WRITE};
+#endif
 
     CacheBus ITLB_bus{&ITLB}, DTLB_bus{&DTLB}, L1I_bus{&L1I}, L1D_bus{&L1D};
 
@@ -171,7 +178,15 @@ public:
         L1D.cpu = this->cpu;
         L1D.cache_type = IS_L1D;
         L1D.fill_level = FILL_L1;
+#if ENABLE_L1M
+        L1D.lower_level = &L1M;
+        L1M.cpu = this->cpu;
+        L1M.cache_type = IS_L1M;
+        L1M.fill_level = FILL_L1M;
+        L1M.lower_level = &L2C;
+#else
         L1D.lower_level = &L2C;
+#endif
 
         L2C.cpu = this->cpu;
         L2C.cache_type = IS_L2C;
@@ -182,6 +197,12 @@ public:
         L2C.l2c_prefetcher_initialize();
 
         using namespace std::placeholders;
+#if ENABLE_L1M
+        L1M.find_victim = std::bind(&CACHE::lru_victim, &L1M, _1, _2, _3, _4, _5, _6, _7);
+        L1M.update_replacement_state = std::bind(&CACHE::lru_update, &L1M, _2, _3, _7, _8);
+        L1M.replacement_final_stats = std::bind(&CACHE::lru_final_stats, &L1M);
+#endif
+
 
         ITLB.find_victim = std::bind(&CACHE::lru_victim, &ITLB, _1, _2, _3, _4, _5, _6, _7);
         DTLB.find_victim = std::bind(&CACHE::lru_victim, &DTLB, _1, _2, _3, _4, _5, _6, _7);
@@ -275,7 +296,7 @@ public:
     static std::string find_trace_short_name(std::string &full_path, NameKind name_kind);
 
     void open_btb_record(const char *mode, bool is_shotgun) {
-        string directory_name = "/mnt/storage/shixins/champsim_pt/";
+        string directory_name = thermometer_data_path("");
         auto filename = find_trace_short_name(trace_name, O3_CPU::NameKind::TRACE) + ".txt";
         if (is_shotgun) {
             string cond_dir_name = directory_name + "btb_conditional_record/" + filename;

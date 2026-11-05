@@ -73,6 +73,20 @@
 #define L1D_MAX_READ @L1D_MAX_READ@
 #define L1D_MAX_WRITE @L1D_MAX_WRITE@
 
+// Optional data-only cache between L1D (physical L0D) and unified L2.
+#define ENABLE_L1M @ENABLE_L1M@
+#define DRAM_DEFAULT_FULL_BANDWIDTH @DRAM_DEFAULT_FULL_BANDWIDTH@
+#define L1M_SET @L1M_SET@u
+#define L1M_WAY @L1M_WAY@u
+#define L1M_WQ_SIZE @L1M_WQ_SIZE@u
+#define L1M_RQ_SIZE @L1M_RQ_SIZE@u
+#define L1M_PQ_SIZE @L1M_PQ_SIZE@u
+#define L1M_MSHR_SIZE @L1M_MSHR_SIZE@u
+#define L1M_HIT_LATENCY @L1M_HIT_LATENCY@u
+#define L1M_FILL_LATENCY @L1M_FILL_LATENCY@u
+#define L1M_MAX_READ @L1M_MAX_READ@u
+#define L1M_MAX_WRITE @L1M_MAX_WRITE@u
+
 // L2C
 
 #define L2C_SET @L2C_SET@u

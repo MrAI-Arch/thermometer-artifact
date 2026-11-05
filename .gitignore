@@ -41,3 +41,9 @@ intel_pt
 .DS_Store
 dpc3_traces
 ..bfg-report
+
+# Local Xeon experiment build/output
+/build-xeon6/
+/runs/
+
+/build-lion-cove/

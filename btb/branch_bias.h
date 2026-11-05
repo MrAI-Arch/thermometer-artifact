@@ -1,3 +1,4 @@
+#include "experiment_paths.h"
 //
 // Created by Shixin Song on 2021/8/4.
 //
@@ -52,7 +53,7 @@ public:
             return;
         }
         auto short_name = O3_CPU::find_trace_short_name(trace_name, O3_CPU::NameKind::TRACE);
-        fs::path opt_access_record_path = "/mnt/storage/shixins/champsim_pt/branch_bias_record";
+        fs::path opt_access_record_path = thermometer_data_path("branch_bias_record");
         fs::create_directory(opt_access_record_path);
         string sub_dir = "way" + std::to_string(total_btb_ways);
         if (total_btb_entries != 8 && total_btb_entries != 8192) {

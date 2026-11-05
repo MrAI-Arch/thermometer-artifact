@@ -1602,6 +1602,9 @@ void O3_CPU::reg_RAW_release(uint32_t rob_index) {
 
 void O3_CPU::operate_cache() {
     L2C.operate();
+#if ENABLE_L1M
+    L1M.operate();
+#endif
     L1D.operate();
     L1I.operate();
     STLB.operate();

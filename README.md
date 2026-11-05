@@ -1,5 +1,16 @@
 <h1 align="center"> Thermometer </h1>
 
+## Lion Cove + DDR4 research configuration
+
+This branch adds a single-core Lion Cove-inspired configuration with classic
+DDR4-3200, an optional 192 KiB intermediate data cache, and reproducible build,
+run, and validation scripts. See [configuration and usage](docs/lion_cove_ddr4.md)
+and [validation results](docs/lion_cove_validation.json). The original `fdip`
+configuration and a Granite Rapids-inspired control are retained.
+
+This is preparation for static-code-only LLM-hinted BTB experiments; an LLM hint
+model is not yet integrated. The original Thermometer attribution follows below.
+
 Thermometer is a profile-guided BTB replacement technique.
 
 Please cite the following [paper](https://web.eecs.umich.edu/~takh/papers/song-thermometer-isca-2022.pdf) if you use this artifact:
